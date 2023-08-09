@@ -1,0 +1,430 @@
+%-------------------------------------------------------------------------------------------------
+% LaTeX Resume for Professionals
+% Author : Rodrigo Zanini
+% License : CC BY 4.0 https://creativecommons.org/licenses/by/4.0/
+%-------------------------------------------------------------------------------------------------
+\documentclass{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[sfdefault,light]{FiraSans}
+\usepackage{fontawesome}
+\usepackage{xcolor}
+\usepackage{calc}
+\usepackage{graphicx}
+\usepackage{tikz}
+\graphicspath{ {./} }
+
+\usepackage[cm,headings]{fullpage}
+
+\usepackage[inline]{enumitem}
+\usepackage{tabularx}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks=true,
+	urlcolor=primary,
+}
+\usepackage{multirow}
+
+
+% page numbering is disabled because whole document fits on a single page
+\pagenumbering{gobble}
+
+%-------------------------------------------------------------------------------------------------
+%---------- CUSTOM COMMANDS
+%-------------------------------------------------------------------------------------------------
+%---------- Icons
+\newcommand{\icon}[1]{\begin{tabular}{p{\iconWidth}}{#1}\end{tabular}}
+\renewcommand{\section}[2]{\vspace{0.5em}\color{primary}\textbf{{#2}{#1}}\hrule\color{black}}
+
+%---------- Head
+\renewcommand{\headrulewidth}{0pt}
+\newcommand{\cvText}[1]{#1\vspace{0.75em}}
+
+%---------- Entries
+% Entry with Name, Time, Position, Location and Details
+\newcommand{\cvEntryNTPLD}[5]{
+	\begin{itemize}[leftmargin=\entryMargin]
+		\item[]
+		\begin{tabularx}{\textwidth-\entryMargin}{Xr}
+			\textbf{\color{black}#1} & {\color{secondary}\small#2} \\
+			\textit{\color{secondary}\small#3} & \textit{\color{secondary}\small#4} \\
+		\end{tabularx}\vspace{-0.75em}
+		\begin{itemize}[labelsep=\entryMargin-1.5em,leftmargin=\entryMargin]
+			\small#5
+		\end{itemize}
+	\end{itemize}
+}
+% Entry with Name, Time, Position and Location
+\newcommand{\cvEntryNTPL}[4]{
+	\begin{itemize}[leftmargin=\entryMargin]
+		\item[]
+		\begin{tabularx}{\textwidth-\entryMargin}{Xr}
+			\textbf{\color{black}#1} & {\color{secondary}\small#2} \\
+			\textit{\color{secondary}\small#3} & \textit{\color{secondary}\small#4} \\
+		\end{tabularx}\vspace{-0.75em}
+	\end{itemize}
+}
+% Entry with Name, Time, Position and Details
+\newcommand{\cvEntryNTPD}[4]{
+	\begin{itemize}[leftmargin=\entryMargin]
+	\item[]
+	\begin{tabularx}{\textwidth-\entryMargin}{Xr}
+		\textbf{\color{black}#1} & {\color{secondary}\small#2} \\
+		\textit{\color{secondary}\small#3} \\
+	\end{tabularx}\vspace{-0.75em}
+	\begin{itemize}[labelsep=\entryMargin-1.5em,leftmargin=\entryMargin]
+		\small#4
+	\end{itemize}
+\end{itemize}
+}
+% Entry with Name, Time and Details
+\newcommand{\cvEntryNTD}[3]{
+	\begin{itemize}[leftmargin=\entryMargin]
+		\item[]
+		\begin{tabularx}{\textwidth-\entryMargin}{Xr}
+			\textbf{\color{black}#1} & {\color{secondary}\small#2} \\
+		\end{tabularx}\vspace{-0.75em}
+		\begin{itemize}[labelsep=\entryMargin-1.5em,leftmargin=\entryMargin]
+			\small#3
+		\end{itemize}
+	\end{itemize}
+}
+% Entry with Name and Details
+\newcommand{\cvEntryND}[2]{
+	\begin{itemize}[leftmargin=\entryMargin]
+		\item[]
+		\begin{tabularx}{\textwidth-\entryMargin}{Xr}
+			\textbf{\color{black}#1} \\
+		\end{tabularx}\vspace{-0.75em}
+		\begin{itemize}[labelsep=\entryMargin-1.5em,leftmargin=\entryMargin]
+			\small#2
+		\end{itemize}
+	\end{itemize}
+}
+% Entry with Name
+\newcommand{\cvEntryN}[1]{
+	\small
+	\begin{itemize}[leftmargin=\entryMargin]
+		#1
+	\end{itemize}
+	\normalsize
+}
+
+% Entry for Languages (up to 4)
+\newcommand{\cvItemL}[8]{
+	\item[]
+	\begin{tabularx}{\textwidth-\entryMargin}{XXXX}
+		{\textbf{#1} \textit{#2}}&{\textbf{#3} \textit{#4}}&{\textbf{#5} \textit{#6}}&{\textbf{#7} \textit{#8}}
+	\end{tabularx}\vspace{-0.25em}
+}
+% Entry for Academical Projects
+\newcommand{\cvEntryAcademicalNTD}[3]{\cvEntryNTD{\educationIcon{Учебный: }#1}{#2}{#3}}
+\newcommand{\cvEntryAcademicalND}[2]{\cvEntryND{\educationIcon{Учебный: }#1}{#2}}
+
+% Entry for Personal Projects
+\newcommand{\cvEntryPersonalNTD}[3]{\cvEntryNTD{\personalIcon{Личный: }#1}{#2}{#3}}
+\newcommand{\cvEntryPersonalND}[2]{\cvEntryND{\personalIcon{Личный: }#1}{#2}}
+
+% Entry for Work Projects
+\newcommand{\cvEntryWorkNTD}[3]{\cvEntryNTD{\workIcon{Рабочий: }#1}{#2}{#3}}
+\newcommand{\cvEntryWorkND}[2]{\cvEntryND{\workIcon{Рабочий: }#1}{#2}}
+
+% Bullet point under an entry's details list
+\newcommand{\cvItem}[1]{\item[\bulletIcon]{#1\vspace{-0.25em}}}
+% Special bullet point under an entry's details list
+\newcommand{\cvItemS}[1]{\item[\accentIcon]{#1\vspace{-0.25em}}}
+% Bulletless point under an entry's details list, with Name and Description 
+\newcommand{\cvItemND}[2]{\item[]{\textbf{#1}\hspace{1em}#2}\vspace{-0.25em}}
+% Simple bulletless text under an entry's details list
+\newcommand{\cvItemT}[1]{\item[]{#1\vspace{-0.25em}}}
+
+% List of skills under an entry's details list
+\newcommand{\cvItemSkillset}[1]{\item[]{\begin{linelist}#1\end{linelist}\vspace{-0.25em}}}
+% link to github project
+\newcommand{\cvItemGithubLink}[1]{\cvItemT{\small\githubIcon\href{https://github.com/#1}{#1}}}
+
+% custom single-line list with items separated with bullet
+\newcommand\sbullet[1][.5]{\mathbin{\vcenter{\hbox{\scalebox{#1}{$\bullet$}}}}}
+\newlist{linelist}{enumerate*}{1}
+\setlist[linelist]{label={}, afterlabel={}, itemjoin={{ $\sbullet$ }}}
+
+%-------------------------------------------------------------------------------------------------
+%---------- SETTINGS HERE
+%-------------------------------------------------------------------------------------------------
+%---------- Colours
+\definecolor{primary}{HTML}{7d26e0}
+\definecolor{secondary}{HTML}{3C454D}
+\definecolor{info}{HTML}{17A2B8}
+
+%---------- Margins
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+\setlength{\voffset}{-0.5cm}
+\setlength{\headheight}{3.5em}
+\addtolength{\headsep}{-2em}
+\addtolength{\oddsidemargin}{-0.25cm}
+\addtolength{\evensidemargin}{-0.25cm}
+\addtolength{\headwidth}{0.5cm}
+\addtolength{\textwidth}{0.5cm}
+
+%---------- Entries
+\def \entryMargin{1em}
+
+%---------- Icons
+\def \iconWidth{1.5em}
+% Predefined icons, based on FontAwesome.
+% see https://ctan.mirror.rafal.ca/fonts/fontawesome/doc/fontawesome.pdf for more options.
+\def \linkedinIcon{\icon{\faLinkedin}}
+\def \telegramIcon{\icon{\faSend}}
+\def \phoneIcon{\icon{\faPhone}}
+\def \homeIcon{\icon{\faHome}}
+\def \emailIcon{\icon{\faEnvelope}}
+\def \githubIcon{\icon{\faGithub}}
+\def \websiteIcon{\icon{\faGlobe}}
+
+\def \educationIcon{\icon{\faGraduationCap}}
+\def \workIcon{\icon{\faBriefcase}}
+\def \projectsIcon{\icon{\faFlask}}
+\def \communicationIcon{\icon{\faComments}}
+\def \awardsIcon{\icon{\faTrophy}}
+\def \skillsIcon{\icon{\faGears}}
+\def \interestsIcon{\icon{\faGamepad}}
+
+\def \expertIcon{\icon{\faStar}}
+\def \proficientIcon{\icon{\faStarHalfFull}}
+\def \noviceIcon{\icon{\faStarO}}
+\def \personalIcon{\icon{\faUser}}
+
+\def \bulletIcon{\icon{\faAngleRight}}
+\def \accentIcon{\icon{\faAngleDoubleRight}} % \faCaretRight \faAngleDoubleRight \faCode
+
+
+%-------------------------------------------------------------------------------------------------
+%---------- DATA HERE
+%-------------------------------------------------------------------------------------------------
+%---------- Header data
+\def \name{Владимир Редькин}
+\def \nameSuffix{}
+\def \subtitleText{Python/Rust разработчик, SRE}
+% 
+\def \summaryText{summary if I had one}
+
+\def \linkedinLink{https://www.linkedin.com/}
+\def \linkedinText{/vsredkin}
+
+\def \phoneText{+7 111 111-11-11}
+
+\def \homeText{J0J 0J0}
+
+\def \emailLink{mailto:vsredkin01@gmail.com}
+\def \emailText{vsredkin01@gmail.com}
+
+\def \githubLink{https://github.com/hectorhw}
+\def \githubText{/HectorHW}
+
+\def \websiteLink{website link}
+\def \websiteText{website text}
+
+\def \telegramLink{https://t.me/hectorhw}
+\def \telegramText{@hectorhw}
+
+%---------- Header format
+\def \fullName{\textbf{\huge\name}\large\hspace{0.3em}\textit{\nameSuffix}}
+\def \subtitle{\textit{\small\cvText{\subtitleText}}}
+\def \summary{\cvText{\summaryText}}
+\def \linkedin{\small\linkedinIcon\href{\linkedinLink}{\linkedinText}}
+\def \phone{\small\phoneIcon{\phoneText}}
+\def \home{\small\homeIcon{\homeText}}
+\def \email{\small\emailIcon\href{\emailLink}{\emailText}}
+\def \github{\small\githubIcon\href{\githubLink}{\githubText}}
+\def \website{\small\websiteIcon\href{\websiteLink}{\websiteText}}
+\def \telegram{\small\telegramIcon\href{\telegramLink}{\telegramText}}
+
+
+%-------------------------------------------------------------------------------------------------
+%---------- START
+%-------------------------------------------------------------------------------------------------
+\begin{document}
+	%-------------------------------------------------------------------------------------------------
+	%---------- HEADER
+	%-------------------------------------------------------------------------------------------------
+		\fancyhead[L]{
+			\begin{tabular}[c]{ll}
+				\multirow{2}{1.7cm}{
+					\begin{tikzpicture}[overlay, remember picture]
+						\clip (0.6,0.3)  circle (0.85cm) ;
+						\node[anchor=center, %anchor is upper left corner of the graphic
+						xshift=1.97cm, %shifting around
+						yshift=-0.88cm] 
+						at (current page.north west) %left upper corner of the page
+						{\includegraphics[width=2.3cm]{photo}}; 
+					\end{tikzpicture}
+				} & {\fullName} \\
+				& {\subtitle}
+			\end{tabular}
+			\vspace{0.5cm}
+		}
+		\fancyhead[R]{
+			\begin{tabular}[c]{l@{\hspace{1em}}l@{\hspace{1em}}l}
+				% Configure the order in which the header data appears. Must be in 3 colums.
+				 {\telegram} & {\github} & {\email}\\
+				\vspace{0.5em}
+			\end{tabular}
+			\vspace{1em}
+		}
+		
+	
+	
+	
+	%-------------------------------------------------------------------------------------------------
+	%---------- INTRODUCTION
+	%-------------------------------------------------------------------------------------------------
+	%\summary\\ % Comment out if not using
+	%-------------------------------------------------------------------------------------------------
+	%---------- EDUCATION
+	%-------------------------------------------------------------------------------------------------
+	\section{Образование}{\educationIcon}
+	\cvEntryNTPD{Казанский федеральный университет}{2019 -- 2023}{Фундаментальная информатика}{
+		\cvItemSkillset{
+			\item Вышмат
+			\item Теория алгоритмов
+			\item Программная инженерия
+			\item Базы данных
+			\item Криптография
+			\item Классический ML
+		}
+	}
+	\cvEntryNTPD{Тинькофф Образование}{2021 -- 2023}{Академия Бэкенда}{
+		\cvItemSkillset{
+			\item Паттерны проектирования
+			\item SOLID
+			\item Проектирование API
+			\item Сеть
+			\item Базы данных
+			\item Мониторинг
+		}
+	}
+	\cvEntryNTPD{Казанский федеральный университет}{2019 -- 2021}{Переводчик в сфере профессиональной коммуникации}{
+		\cvItemSkillset{
+			\item Английский язык
+			\item Письменный перевод
+			\item Синхронный перевод
+		}
+	}
+	
+	%-------------------------------------------------------------------------------------------------
+	%---------- WORK EXPERIENCE
+	%-------------------------------------------------------------------------------------------------
+	\section{Опыт работы}{\workIcon}
+	\cvEntryNTPD
+	{Тинькофф}{январь 2023 -- июль 2023}
+	{Стажёр-разработчик (департамент ИТ инфраструктуры)}{
+		\cvItem{
+			Чат-бот, отслеживающий новые релизы на GitHub
+		}
+		\cvItem{
+			Визуализация инфраструктуры
+		}
+		\cvItem{
+			Развитие системы генерации конфигурации prometheus
+		}
+	}
+	
+	%-------------------------------------------------------------------------------------------------
+	%---------- PROJECTS
+	%-------------------------------------------------------------------------------------------------
+	%\newpage %Uncomment if FIRST ITEM of this section is not entirely on this page
+	\section{Проекты}{\projectsIcon}
+	\cvEntryWorkND{Чат-бот, отслеживающий новые релизы на GitHub}{
+		\cvItemT{Бот выводит уведомления о новых версиях, прикрепляет changelog и при необходимости позволяет заводить задачки на обновление в Jira. Бот использует S3 для хранения состояния, развёрнут в k8s и конфигурируется через git.}
+		\cvItemSkillset{
+			\item Python
+			\item Pydantic
+			\item FastAPI
+			\item S3
+			\item Docker
+			\item Kubernetes
+			\item Helm
+		}
+	}
+
+	\cvEntryWorkND{Визуализация инфраструктуры}{
+		\cvItemT{
+			Делал панель для мониторинга серверов. Панель содержит довольно большое число правил, для автоматической генерации написан скрипт, полагающийся на два jinja-темплейта.
+		}
+		\cvItemSkillset{
+			\item Python
+			\item Poetry
+			\item Jinja
+			\item Grafana
+			\item FlowCharting
+		}
+	}
+
+	\cvEntryWorkND{Развитие системы генерации конфигурации prometheus}{
+		\cvItemT{
+			На замену ранее существовавшему костыльному коду создан jinja-темплейт и разработан yaml-based DSL для описания устройств и автоматической генерации таргетов prometheus.
+		}
+		\cvItemSkillset{
+			\item Python
+			\item Poetry
+			\item Jinja
+			\item Pydantic
+			\item PyYaml
+		}
+	}
+
+	\cvEntryPersonalND{Homelab}{
+		\cvItemGithubLink{HectorHW/nginx\_configurator}
+		\cvItemT{
+			Набор сервисов, развёрнутых на моём домашнем сервере, для которых я потихоньку делаю автоматизацию и мониторинг.
+		}
+		\cvItemSkillset{
+			\item Linux
+			\item Nginx
+			\item Cloudflare
+			\item Prometheus
+		}
+	}
+	
+	\cvEntryAcademicalND{Интерпретируемый язык программирования}{
+		\cvItemGithubLink{HectorHW/blop-lang}
+		\cvItemT{
+			В рамках курсовой работы написал интерпретатор функционального языка программирования, включающий парсер, байткодовую виртуальную машину и сборщик мусора.
+		}
+		\cvItemSkillset{
+			\item Rust
+			\item PEG parsing
+			\item Interpreter
+			\item Language runtime
+			\item GC
+		}
+	}
+
+	\cvEntryAcademicalND{Грамматический фаззер}{
+		\cvItemGithubLink{HectorHW/bocchifuzz}
+		\cvItemT{
+			В рамках дипломной работы разработал фаззер, позволяющий описывать входные данные в виде грамматики либо набора начальных образцов и проводить фазз-тестирование без модификации или перекомпиляции исследуемых файлов.
+		}
+		\cvItemSkillset{
+			\item Rust
+			\item PEG parsing
+			\item TUI
+			\item Ptrace
+		}
+	}
+
+	%-------------------------------------------------------------------------------------------------
+	%---------- INTERSESTS
+	%-------------------------------------------------------------------------------------------------
+	%\newpage %Uncomment if FIRST ITEM of this section is not entirely on this page
+	\section{Остальные интересы и увлечения}{\interestsIcon}
+	\cvEntryN{
+		\cvItemND{Bio-inspired computing}{Люблю изучать вещи на стыке информатики и биологии: генетические алгоритмы, swarm intelligence, нейронные сети.}
+		\cvItemND{Волонтёрство}{Помогаю с организацией научно-популярных лекций в Национальной библиотеке Республики Татарстан.}
+	}
+\end{document}

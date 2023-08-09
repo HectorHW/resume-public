@@ -1,0 +1,14 @@
+*.log
+*.pdf
+*.synctex.gz
+*.aux
+*.txss2
+*.bbl
+*.bcf
+*.blg
+*.run.xml
+*.toc
+*.nav
+*.out
+*.snm
+*.bkp
