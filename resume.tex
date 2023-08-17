@@ -144,7 +144,8 @@
 % List of skills under an entry's details list
 \newcommand{\cvItemSkillset}[1]{\item[]{\begin{linelist}#1\end{linelist}\vspace{-0.25em}}}
 % link to github project
-\newcommand{\cvItemGithubLink}[1]{\cvItemT{\small\githubIcon\href{https://github.com/#1}{#1}}}
+\newcommand{\ghlink}[1]{\small\githubIcon\hspace*{-0.4em}\href{https://github.com/#1}{#1}}
+\newcommand{\cvItemGithubLink}[1]{\cvItemT{\ghlink{#1}}}
 
 % custom single-line list with items separated with bullet
 \newcommand\sbullet[1][.5]{\mathbin{\vcenter{\hbox{\scalebox{#1}{$\bullet$}}}}}
@@ -240,7 +241,7 @@
 \def \phone{\small\phoneIcon{\phoneText}}
 \def \home{\small\homeIcon{\homeText}}
 \def \email{\small\emailIcon\href{\emailLink}{\emailText}}
-\def \github{\small\githubIcon\href{\githubLink}{\githubText}}
+\def \github{\small\githubIcon\hspace*{-0.3em}\href{\githubLink}{\githubText}}
 \def \website{\small\websiteIcon\href{\websiteLink}{\websiteText}}
 \def \telegram{\small\telegramIcon\href{\telegramLink}{\telegramText}}
 
