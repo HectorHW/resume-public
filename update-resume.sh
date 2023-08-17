@@ -3,6 +3,11 @@
 # this script is intended to be run by webhook server
 # $1 is workflow id
 
+set -e
+
+# we have to wait for gh actions to finish and nightly.link to update
+sleep 5m
+
 TEMPD=$(mktemp -d)
 
 trap "exit 1"           HUP INT PIPE QUIT TERM
