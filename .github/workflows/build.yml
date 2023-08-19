@@ -43,9 +43,6 @@ jobs:
         with:
           name: PDF
 
-      - name: See where artifact was stored
-        run: ls -R
-
       - name: Upload file to Cloudflare R2
         run: |
           s3cmd put resume.pdf s3://cvdata/resume.pdf
