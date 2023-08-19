@@ -30,9 +30,19 @@ jobs:
     needs: build_latex
     if: github.ref == 'refs/heads/master'
     steps:
-      - name: Invoke deployment hook
-        uses: distributhor/workflow-webhook@v3
-        env:
-          webhook_url: ${{ secrets.WEBHOOK_URL }}
-          webhook_secret: ${{ secrets.WEBHOOK_SECRET }}
-          data: '{ "action_id":"${{ github.run_id }}" }'
+      - name: Set up S3cmd cli tool
+        uses: s3-actions/s3cmd@v1.5.0
+        with:
+          provider: cloudflare
+          access_key: ${{ secrets.S3_ACCESS_KEY }}
+          secret_key: ${{ secrets.S3_SECRET_KEY }}
+          account_id: ${{ secrets.CF_ACCOUNT_ID }}
+
+      - name: Fetch artifact from build stage
+        uses: actions/download-artifact@master
+        with:
+          name: PDF
+
+      - name: Upload file to Cloudflare R2
+        run: |
+          s3cmd put resume.pdf s3://cvdata/resume.pdf
