@@ -39,4 +39,4 @@ jobs:
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
-          command: wrangler kv:key put resume.pdf --path resume.pdf --namespace-id ${{ secrets.KV_NAMESPACE_ID }}
+          command: kv:key put resume.pdf --path resume.pdf --namespace-id ${{ secrets.KV_NAMESPACE_ID }}
