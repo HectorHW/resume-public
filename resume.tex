@@ -71,14 +71,24 @@
 \newcommand{\cvEntryNTPD}[4]{
 	\begin{itemize}[leftmargin=\entryMargin]
 	\item[]
-	\begin{tabularx}{\textwidth-\entryMargin}{Xr}
-		\textbf{\color{black}#1} & {\color{secondary}\small#2} \\
-		\textit{\color{secondary}\small#3} \\
-	\end{tabularx}\vspace{-0.75em}
-	\begin{itemize}[labelsep=\entryMargin-1.5em,leftmargin=\entryMargin]
-		\small#4
+		\begin{tabularx}{\textwidth-\entryMargin}{Xr}
+			\textbf{\color{black}#1} & {\color{secondary}\small#2} \\
+			\textit{\color{secondary}\small#3} \\
+		\end{tabularx}\vspace{-0.75em}
+		\begin{itemize}[labelsep=\entryMargin-1.5em,leftmargin=\entryMargin]
+			\small#4
+		\end{itemize}
 	\end{itemize}
-\end{itemize}
+}
+% Entry with Name, Time and Position
+\newcommand{\cvEntryNTP}[3]{
+	\begin{itemize}[leftmargin=\entryMargin]
+		\item[]
+		\begin{tabularx}{\textwidth-\entryMargin}{Xr}
+			\textbf{\color{black}#1} & {\color{secondary}\small#2} \\
+			\textit{\color{secondary}\small#3} \\
+		\end{tabularx}\vspace{-0.75em}
+	\end{itemize}
 }
 % Entry with Name, Time and Details
 \newcommand{\cvEntryNTD}[3]{
@@ -139,13 +149,13 @@
 % Bulletless point under an entry's details list, with Name and Description 
 \newcommand{\cvItemND}[2]{\item[]{\textbf{#1}\hspace{1em}#2}\vspace{-0.25em}}
 % Simple bulletless text under an entry's details list
-\newcommand{\cvItemT}[1]{\item[]{#1\vspace{-0.25em}}}
+\newcommand{\cvItemText}[1]{\item[]{#1\vspace{-0.25em}}}
 
 % List of skills under an entry's details list
 \newcommand{\cvItemSkillset}[1]{\item[]{\begin{linelist}#1\end{linelist}\vspace{-0.25em}}}
 % link to github project
 \newcommand{\ghlink}[1]{\small\githubIcon\hspace*{-0.4em}\href{https://github.com/#1}{#1}}
-\newcommand{\cvItemGithubLink}[1]{\cvItemT{\ghlink{#1}}}
+\newcommand{\cvItemGithubLink}[1]{\cvItemText{\ghlink{#1}}}
 
 % custom single-line list with items separated with bullet
 \newcommand\sbullet[1][.5]{\mathbin{\vcenter{\hbox{\scalebox{#1}{$\bullet$}}}}}
@@ -288,14 +298,14 @@
 	%---------- EDUCATION
 	%-------------------------------------------------------------------------------------------------
 	\section{Образование}{\educationIcon}
-	\cvEntryNTPD{Казанский федеральный университет}{2023 -- present}{Фундаментальная информатика (магистратура)}{
+	\cvEntryNTPD{Казанский федеральный университет}{2023 -- present}{Магистратура -- Математические основы и программное обеспечение информационной безопасности}{
 		\cvItemSkillset{
-			\item Параллельное программирование
 			\item Квантовые вычисления
 			\item Защита информации
+			\item Параллельное программирование
 		}	
 	}
-	\cvEntryNTPD{Казанский федеральный университет}{2019 -- 2023}{Фундаментальная информатика (бакалавриат)}{
+	\cvEntryNTPD{Казанский федеральный университет}{2019 -- 2023}{Бакалавриат -- Фундаментальная информатика}{
 		\cvItemSkillset{
 			\item Вышмат
 			\item Теория алгоритмов
@@ -327,103 +337,31 @@
 	%---------- WORK EXPERIENCE
 	%-------------------------------------------------------------------------------------------------
 	\section{Опыт работы}{\workIcon}
-	\cvEntryNTPD
-	{Тинькофф}{январь 2023 -- июль 2023}
-	{Стажёр-разработчик (департамент ИТ-инфраструктуры)}{
-		\cvItem{
-			Чат-бот, отслеживающий новые релизы на GitHub
+	\cvEntryNTPD{Тинькофф}{сентябрь 2023 -- present}{Младший разработчик}{
+		\cvItemText{
+			Занимаюсь разработкой и развёртыванием системы сбора и обогащения логов, упрощающей жизнь сотрудников ИБ и поддержки. Помогаю коллегам-админам с автоматизацией.
 		}
-		\cvItem{
-			Визуализация инфраструктуры
-		}
-		\cvItem{
-			
-			Развитие системы генерации конфигурации prometheus
-		}
-	}
-	
-	%-------------------------------------------------------------------------------------------------
-	%---------- PROJECTS
-	%-------------------------------------------------------------------------------------------------
-	%\newpage %Uncomment if FIRST ITEM of this section is not entirely on this page
-	\section{Проекты}{\projectsIcon}
-	\cvEntryWorkND{Чат-бот, отслеживающий новые релизы на GitHub}{
-		\cvItemT{Бот выводит уведомления о новых версиях, прикрепляет changelog и при необходимости позволяет заводить задачки на обновление в Jira. Бот использует S3 для хранения состояния, развёрнут в k8s и конфигурируется через git.}
 		\cvItemSkillset{
+			\item Rust
 			\item Python
-			\item Pydantic
-			\item FastAPI
-			\item S3
-			\item Docker
-			\item Kubernetes
-			\item Helm
-		}
-	}
-
-	\cvEntryWorkND{Визуализация инфраструктуры}{
-		\cvItemT{
-			Делал панель для мониторинга серверов. Панель содержит довольно большое число правил, для автоматической генерации написан скрипт, полагающийся на два jinja-темплейта.
-		}
-		\cvItemSkillset{
-			\item Python
-			\item Poetry
-			\item Jinja
-			\item Grafana
-			\item FlowCharting
-		}
-	}
-
-	\cvEntryWorkND{Развитие системы генерации конфигурации prometheus}{
-		\cvItemT{
-			На замену ранее существовавшему костыльному коду создан jinja-темплейт и разработан yaml-based DSL для описания устройств и автоматической генерации таргетов prometheus.
-		}
-		\cvItemSkillset{
-			\item Python
-			\item Poetry
-			\item Jinja
-			\item Pydantic
-			\item PyYaml
-		}
-	}
-
-	\cvEntryPersonalND{Homelab}{
-		\cvItemGithubLink{HectorHW/nginx\_configurator}
-		\cvItemT{
-			Набор сервисов, развёрнутых на моём домашнем сервере + Cloudflare, для которых я потихоньку делаю автоматизацию и мониторинг.
-		}
-		\cvItemSkillset{
+			\item Ansible
+			\item Gitlab
 			\item Linux
-			\item Nginx
-			\item Cloudflare
-			\item Prometheus
-			\item GitHub Actions
 		}
 	}
-	
-	\cvEntryAcademicalND{Интерпретируемый язык программирования}{
-		\cvItemGithubLink{HectorHW/blop-lang}
-		\cvItemT{
-			В рамках курсовой работы написал интерпретатор функционального языка программирования, включающий парсер, байткодовую виртуальную машину и сборщик мусора.
+	\cvEntryNTPD{Тинькофф}{январь 2023 -- июль 2023}
+	{Стажёр-разработчик}{
+		\cvItemText{
+			Стажировался в департаменте ИТ-инфраструктуры. Разрабатывал и деплоил чат-бота, которым теперь пользуются несколько команд. Вместе с коллегами занимался инструментами для генерации и проверки конфигурации Prometheus; делал визуализацию в Grafana, помогающую диагностировать проблемы с NTP.
 		}
 		\cvItemSkillset{
-			\item Rust
-			\item PEG parsing
-			\item Interpreter
-			\item Language runtime
-			\item GC
-		}
-	}
-
-	\cvEntryAcademicalND{Грамматический фаззер}{
-		\cvItemGithubLink{HectorHW/bocchifuzz}
-		\cvItemT{
-			В рамках дипломной работы разработал фаззер, позволяющий описывать входные данные в виде грамматики либо набора начальных образцов и проводить фазз-тестирование без модификации или перекомпиляции исследуемых файлов.
-		}
-		\cvItemSkillset{
-			\item Rust
-			\item PEG parsing
-			\item TUI
-			\item Ptrace
+			\item Python
+			\item Jinja
+			\item Helm
+			\item Gitlab
+			\item Kubernetes
+			\item S3
+			\item Grafana
 		}
 	}
 
