@@ -20,7 +20,7 @@ jobs:
             xelatex -interaction=nonstopmode resume.tex
 
       - name: Upload PDF file
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4.3.3
         with:
           name: PDF
           path: resume.pdf
@@ -31,7 +31,7 @@ jobs:
     if: github.ref == 'refs/heads/master'
     steps:
       - name: Fetch artifact from build stage
-        uses: actions/download-artifact@master
+        uses: actions/download-artifact@v4.0.0
         with:
           name: PDF
       
